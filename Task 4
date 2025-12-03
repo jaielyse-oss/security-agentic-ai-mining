@@ -1,36 +1,61 @@
 import pandas as pd
+import os
 import re
 
-df = pd.read_csv("data/pr_commit_details.csv")
 
-# Clean diff text (patch column)
-def clean_patch(text):
+def clean_patch(text: str) -> str:
+    """
+    Remove special / non-ASCII characters from patch/diff text
+    to avoid encoding issues and messy CSV rows.
+
+    - Converts NaN to empty string
+    - Keeps basic printable ASCII only (space to ~)
+    """
     if pd.isna(text):
         return ""
-    return re.sub(r'[^\x00-\x7F]+', ' ', text)  # remove non-ASCII chars
+    # Keep only printable ASCII characters
+    cleaned = re.sub(r'[^\x20-\x7E]+', ' ', str(text))
+    # Collapse multiple spaces
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    return cleaned
 
-df["patch"] = df["patch"].apply(clean_patch)
 
-task4 = df[[
-    "pr_id",
-    "sha",
-    "message",
-    "filename",
-    "status",
-    "additions",
-    "deletions",
-    "changes",
-    "patch"
-]].rename(columns={
-    "pr_id": "PRID",
-    "sha": "PRSHA",
-    "message": "PRCOMMITMESSAGE",
-    "filename": "PRFILE",
-    "status": "PRSTATUS",
-    "additions": "PRADDS",
-    "deletions": "PRDELSS",
-    "changes": "PRCHANGECOUNT",
-    "patch": "PRDIFF"
-})
+def main():
+    os.makedirs("outputs", exist_ok=True)
 
-task4.to_csv("outputs/task4_output.csv", index=False)
+    df = pd.read_csv("data/pr_commit_details.csv")
+
+    # Clean the diff / patch column
+    if "patch" in df.columns:
+        df["patch"] = df["patch"].apply(clean_patch)
+    else:
+        raise KeyError("Expected column 'patch' not found in pr_commit_details.csv")
+
+    task4 = df[[
+        "pr_id",
+        "sha",
+        "message",
+        "filename",
+        "status",
+        "additions",
+        "deletions",
+        "changes",
+        "patch"
+    ]].rename(columns={
+        "pr_id": "PRID",
+        "sha": "PRSHA",
+        "message": "PRCOMMITMESSAGE",
+        "filename": "PRFILE",
+        "status": "PRSTATUS",
+        "additions": "PRADDS",
+        "deletions": "PRDELSS",
+        "changes": "PRCHANGECOUNT",
+        "patch": "PRDIFF"
+    })
+
+    task4.to_csv("outputs/task4_output.csv", index=False)
+    print("Task-4: outputs/task4_output.csv written successfully.")
+
+
+if __name__ == "__main__":
+    main()
