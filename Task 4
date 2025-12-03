@@ -1,0 +1,36 @@
+import pandas as pd
+import re
+
+df = pd.read_csv("data/pr_commit_details.csv")
+
+# Clean diff text (patch column)
+def clean_patch(text):
+    if pd.isna(text):
+        return ""
+    return re.sub(r'[^\x00-\x7F]+', ' ', text)  # remove non-ASCII chars
+
+df["patch"] = df["patch"].apply(clean_patch)
+
+task4 = df[[
+    "pr_id",
+    "sha",
+    "message",
+    "filename",
+    "status",
+    "additions",
+    "deletions",
+    "changes",
+    "patch"
+]].rename(columns={
+    "pr_id": "PRID",
+    "sha": "PRSHA",
+    "message": "PRCOMMITMESSAGE",
+    "filename": "PRFILE",
+    "status": "PRSTATUS",
+    "additions": "PRADDS",
+    "deletions": "PRDELSS",
+    "changes": "PRCHANGECOUNT",
+    "patch": "PRDIFF"
+})
+
+task4.to_csv("outputs/task4_output.csv", index=False)
