@@ -1,0 +1,5 @@
+security_keywords = [
+    "vulnerability", "injection", "sanitize", "xss", "csrf",
+    "security", "auth", "secure", "exploit", "unsafe",
+    "patch", "malicious", "leak"
+]
