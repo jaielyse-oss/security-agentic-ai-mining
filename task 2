@@ -1,0 +1,17 @@
+import pandas as pd
+
+df = pd.read_csv("data/all_repository.csv")
+
+task2 = df[[
+    "id",
+    "language",
+    "stars",
+    "url"
+]].rename(columns={
+    "id": "REPOID",
+    "language": "LANG",
+    "stars": "STARS",
+    "url": "REPOURL"
+})
+
+task2.to_csv("outputs/task2_output.csv", index=False)
