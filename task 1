@@ -1,0 +1,21 @@
+import pandas as pd
+
+df = pd.read_csv("data/all_pull_request.csv")
+
+task1 = df[[
+    "title",
+    "id",
+    "agent",
+    "body",
+    "repo_id",
+    "repo_url"
+]].rename(columns={
+    "title": "TITLE",
+    "id": "ID",
+    "agent": "AGENTNAME",
+    "body": "BODYSTRING",
+    "repo_id": "REPOID",
+    "repo_url": "REPOURL"
+})
+
+task1.to_csv("outputs/task1_output.csv", index=False)
