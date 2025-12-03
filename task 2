@@ -1,17 +1,27 @@
 import pandas as pd
+import os
 
-df = pd.read_csv("data/all_repository.csv")
 
-task2 = df[[
-    "id",
-    "language",
-    "stars",
-    "url"
-]].rename(columns={
-    "id": "REPOID",
-    "language": "LANG",
-    "stars": "STARS",
-    "url": "REPOURL"
-})
+def main():
+    os.makedirs("outputs", exist_ok=True)
 
-task2.to_csv("outputs/task2_output.csv", index=False)
+    df = pd.read_csv("data/all_repository.csv")
+
+    task2 = df[[
+        "id",
+        "language",
+        "stars",
+        "url"
+    ]].rename(columns={
+        "id": "REPOID",
+        "language": "LANG",
+        "stars": "STARS",
+        "url": "REPOURL"
+    })
+
+    task2.to_csv("outputs/task2_output.csv", index=False)
+    print("Task-2: outputs/task2_output.csv written successfully.")
+
+
+if __name__ == "__main__":
+    main()
