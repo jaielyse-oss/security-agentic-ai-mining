@@ -1,21 +1,36 @@
 import pandas as pd
+import os
 
-df = pd.read_csv("data/all_pull_request.csv")
 
-task1 = df[[
-    "title",
-    "id",
-    "agent",
-    "body",
-    "repo_id",
-    "repo_url"
-]].rename(columns={
-    "title": "TITLE",
-    "id": "ID",
-    "agent": "AGENTNAME",
-    "body": "BODYSTRING",
-    "repo_id": "REPOID",
-    "repo_url": "REPOURL"
-})
+def main():
+    # Ensure outputs directory exists
+    os.makedirs("outputs", exist_ok=True)
 
-task1.to_csv("outputs/task1_output.csv", index=False)
+    # Load the original all_pull_request table
+    df = pd.read_csv("data/all_pull_request.csv")
+
+    # Select and rename columns according to the rubric
+    task1 = df[[
+        "title",
+        "id",
+        "agent",
+        "body",
+        "repo_id",
+        "repo_url"
+    ]].rename(columns={
+        "title": "TITLE",
+        "id": "ID",
+        "agent": "AGENTNAME",
+        "body": "BODYSTRING",
+        "repo_id": "REPOID",
+        "repo_url": "REPOURL"
+    })
+
+    # Save to CSV
+    task1.to_csv("outputs/task1_output.csv", index=False)
+    print("Task-1: outputs/task1_output.csv written successfully.")
+
+
+if __name__ == "__main__":
+    main()
+
