@@ -1,0 +1,19 @@
+import pandas as pd
+
+df = pd.read_csv("data/pr_task_type.csv")
+
+task3 = df[[
+    "id",
+    "title",
+    "reason",
+    "type",
+    "confidence"
+]].rename(columns={
+    "id": "PRID",
+    "title": "PRTITLE",
+    "reason": "PRREASON",
+    "type": "PRTYPE",
+    "confidence": "CONFIDENCE"
+})
+
+task3.to_csv("outputs/task3_output.csv", index=False)
